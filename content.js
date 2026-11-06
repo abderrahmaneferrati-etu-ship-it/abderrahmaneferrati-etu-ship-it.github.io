@@ -122,8 +122,8 @@ window.portfolioData = {
             "en": "PVsyst simulation"
           },
           "text": {
-            "fr": "La production annuelle de 2,18 GWh et les couvertures de consommation de 41 % en été et 31 % en hiver sont des résultats simulés rapportés dans mon CV.",
-            "en": "The annual production of 2.18 GWh and demand coverage of 41% in summer and 31% in winter are simulated results reported in my résumé."
+            "fr": "La production annuelle de 2,18 GWh et les couvertures de consommation de 56,9 % en été et 41,2 % en hiver (temps froid) sont des résultats simulés rapportés dans mon CV.",
+            "en": "The annual production of 2.18 GWh and demand coverage of 56.9% in summer and 41.2% in winter (cold weather) are simulated results reported in my résumé."
           }
         },
         {

@@ -15,7 +15,7 @@ const translations = {
     yazakiSummary: 'Conception en équipe d’un système photovoltaïque en autoconsommation, de l’analyse des besoins à l’implantation BIM en toiture.',
     pvCapacity: 'Puissance dimensionnée', pvOutput: 'Production annuelle simulée', pvEquipment: 'Panneaux / onduleurs',
     yazaki1: 'Analyse des factures d’électricité et des contraintes de toiture ; sélection des composants et d’une fixation lestée.',
-    yazaki2: 'Calculs de dimensionnement validés sous PVsyst : couverture simulée de 41 % en été et de 31 % en hiver.',
+    yazaki2: 'Calculs de dimensionnement validés sous PVsyst : couverture simulée de 56,9 % en été et de 41,2 % en hiver (temps froid).',
     yazaki3: 'Modélisation BIM et rendus sous Revit pour préparer l’implantation en toiture.',
     yazaki4: 'Tableau de bord de démonstration en développement : puissance instantanée, énergie produite et anomalies simulées.',
     pvTag: 'Autoconsommation', oncfRole: 'Stage d’initiation · Modernisation du freinage du RGV sous ERTMS', oncfDate: 'Juin – Août 2025',
@@ -59,7 +59,7 @@ const translations = {
     yazakiSummary: 'Team-based design of a self-consumption photovoltaic system, from electricity demand analysis to rooftop BIM layout.',
     pvCapacity: 'Designed system capacity', pvOutput: 'Simulated annual generation', pvEquipment: 'Panels / inverters',
     yazaki1: 'Analyzed electricity bills and roof constraints; selected components and a ballasted mounting system.',
-    yazaki2: 'Validated sizing calculations in PVsyst: simulated demand coverage of 41% in summer and 31% in winter.',
+    yazaki2: 'Validated sizing calculations in PVsyst: simulated demand coverage of 56.9% in summer and 41.2% in winter (cold weather).',
     yazaki3: 'Created BIM models and renders in Revit to plan the rooftop installation.',
     yazaki4: 'Developing a demonstration dashboard for instantaneous power, energy generation, and simulated faults.',
     pvTag: 'Self-consumption', oncfRole: 'Introductory internship · RGV braking system modernization under ERTMS', oncfDate: 'Jun – Aug 2025',
@@ -205,7 +205,7 @@ function setLanguage(requested, announce = true) {
   });
   document.querySelectorAll('[data-i18n-alt]').forEach(el => { if(copy[el.dataset.i18nAlt]) el.alt=copy[el.dataset.i18nAlt]; });
   document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.lang===language)));
-  document.querySelectorAll('.cv-link').forEach(a => { a.href=`cv-${language}.pdf`; a.download=`Abderrahmane-FERRATI-${language==='fr'?'CV-FR':'Resume-EN'}.pdf`; });
+  document.querySelectorAll('.cv-link').forEach(a => { a.href=language==='en'?'ABDERRAHMANE_FERRATI_RESUME.pdf':'cv-fr.pdf'; a.download=language==='en'?'ABDERRAHMANE_FERRATI_RESUME.pdf':'Abderrahmane-FERRATI-CV-FR.pdf'; });
   const availability=content.availability;
   document.querySelectorAll('[data-availability]').forEach(el => el.textContent=[availability.startLabel,availability.duration,availability.mobility].map(local).filter(Boolean).join(' · '));
   document.querySelector('[data-i18n="engineeringDate"]').textContent=`${content.profile.engineeringStart} – ${language==='fr'?'en cours':'present'}`;

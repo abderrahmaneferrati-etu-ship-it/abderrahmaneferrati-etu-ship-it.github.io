@@ -130,118 +130,162 @@ Object.assign(translations.en, {
   illustrationNote: 'The visuals are project illustrations. Technical details are based on my résumé.'
 });
 
-function setLanguage(language, announce = true) {
-  const lang = Object.hasOwn(translations, language) ? language : 'fr';
-  const copy = translations[lang];
-  document.documentElement.lang = lang;
-  document.title = copy.title;
-  document.querySelector('meta[name="description"]').content = copy.description;
-  document.querySelectorAll('[data-i18n]').forEach(element => {
-    const value = copy[element.dataset.i18n];
-    if (value !== undefined) element.textContent = value;
-  });
-  document.querySelectorAll('[data-i18n-aria]').forEach(element => {
-    element.setAttribute('aria-label', copy[element.dataset.i18nAria]);
-  });
-  document.querySelectorAll('[data-i18n-alt]').forEach(element => {
-    element.alt = copy[element.dataset.i18nAlt];
-  });
-  const toggle = document.querySelector('.menu-toggle');
-  if (toggle && toggle.getAttribute('aria-expanded') === 'true') toggle.setAttribute('aria-label', copy.closeMenu);
-  document.querySelectorAll('[data-lang]').forEach(button => {
-    button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
-  });
-  document.querySelectorAll('.cv-link').forEach(link => {
-    link.href = `cv-${lang}.pdf`;
-    link.download = `Abderrahmane-FERRATI-${lang === 'fr' ? 'CV-FR' : 'Resume-EN'}.pdf`;
-  });
-  const metrics = document.querySelectorAll('.pv-metrics strong');
-  metrics[0].firstChild.textContent = lang === 'fr' ? '1,20 ' : '1.20 ';
-  metrics[1].firstChild.textContent = lang === 'fr' ? '2,18 ' : '2.18 ';
-  metrics[1].querySelector('small').textContent = lang === 'fr' ? 'GWh/an' : 'GWh/year';
-  metrics[2].firstChild.textContent = lang === 'fr' ? '1 656 ' : '1,656 ';
-  try { localStorage.setItem('portfolio-language', lang); } catch (_) { /* Still works with storage disabled. */ }
-  try {
-    const url = new URL(window.location.href);
-    url.searchParams.set('lang', lang);
-    history.replaceState(null, '', url.pathname + url.search + url.hash);
-  } catch (_) { /* Local file previews may restrict history. */ }
-  if (announce) document.getElementById('language-announcement').textContent = copy.announcement;
-}
+const content = window.portfolioData;
+for (const lang of ['fr', 'en']) Object.assign(translations[lang], content.copy[lang]);
+let language = 'fr';
+let projectOpener = null;
+const baseUrl = 'https://abderrahmaneferrati-etu-ship-it.github.io/';
+const local = value => typeof value === 'string' ? value : value?.[language] || '';
+const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const e = value => escapeHtml(local(value));
+const t = key => translations[language][key] || '';
+const projectFromRoute = () => content.projects.find(p => `#project-${p.id}` === location.hash);
+const tags = values => `<div class="tags">${values.map(v => `<span>${e(v)}</span>`).join('')}</div>`;
 
-let initialLanguage = new URLSearchParams(window.location.search).get('lang');
-if (!initialLanguage) {
-  try { initialLanguage = localStorage.getItem('portfolio-language'); } catch (_) { /* Default to French. */ }
+// Evidence is deliberately empty until authentic, authorized files are supplied.
+// Supported types: image {src, alt, caption}, pdf {src, caption}, video {src, poster, caption}.
+function renderEvidence(items) {
+  if (!items?.length) return '';
+  const media = items.map(item => {
+    if (!item.src) return '';
+    const src = escapeHtml(item.src), caption = e(item.caption);
+    if (item.type === 'image') return `<figure><button type="button" class="evidence-image" data-image="${src}" data-caption="${caption}" data-alt="${e(item.alt)}" aria-label="${escapeHtml(t('openImage'))}"><img src="${src}" alt="${e(item.alt)}" loading="lazy" width="960" height="640"></button><figcaption>${caption}</figcaption></figure>`;
+    if (item.type === 'pdf') return `<figure class="pdf-evidence"><a class="button button-outline" href="${src}" target="_blank" rel="noopener">${escapeHtml(t('openPdf'))}</a><figcaption>${caption}</figcaption></figure>`;
+    if (item.type === 'video') return `<figure><video controls preload="metadata" ${item.poster ? `poster="${escapeHtml(item.poster)}"` : ''}><source src="${src}"></video><figcaption>${caption}</figcaption></figure>`;
+    return '';
+  }).join('');
+  return media ? `<section class="case-evidence"><h3>${escapeHtml(t('evidence'))}</h3><div class="evidence-grid">${media}</div></section>` : '';
 }
-setLanguage(initialLanguage || 'fr', false);
-document.querySelectorAll('[data-lang]').forEach(button => {
-  button.addEventListener('click', () => { setLanguage(button.dataset.lang); updateClock(); });
-});
-
-const menuToggle = document.querySelector('.menu-toggle');
-const siteMenu = document.getElementById('site-menu');
-function setMenu(open, restoreFocus = true) {
-  siteMenu.hidden = !open;
-  menuToggle.setAttribute('aria-expanded', String(open));
-  menuToggle.setAttribute('aria-label', translations[document.documentElement.lang][open ? 'closeMenu' : 'openMenu']);
-  document.body.classList.toggle('menu-open', open);
-  document.querySelector('main').inert = open;
-  document.querySelector('footer').inert = open;
-  if (open) siteMenu.querySelector('.menu-inner > a').focus();
-  else if (restoreFocus) menuToggle.focus();
+function renderProjects() {
+  content.projects.forEach((p,index) => {
+    const card = document.querySelector(`[data-card="${p.id}"]`);
+    card.innerHTML = `<span class="card-context">${e(p.context)}</span><span class="card-summary">${e(p.summary)}</span>${tags(p.tools.slice(0,3))}<span class="card-result">${e(p.metrics[0].value)} · ${e(p.metrics[0].label)}</span><span class="card-action">${escapeHtml(t('viewProject'))}</span>`;
+    const visualTitle = card.closest('.work-card').querySelector('.work-title');
+    visualTitle.textContent = local(p.title);
+    const skill = document.querySelector(`[data-skill-project="${p.id}"]`);
+    if (skill) skill.textContent = `${local(p.title)} ↗`;
+    const next = content.projects[(index+1)%content.projects.length];
+    document.querySelector(`[data-case="${p.id}"]`).innerHTML = `
+      <p class="case-context">${e(p.context)}</p>
+      <h2 id="dialog-title-${p.id}" tabindex="-1">${e(p.title)}</h2>
+      <p class="case-status">${e(p.status)}</p><p class="case-lead">${e(p.summary)}</p>
+      <div class="case-overview"><section><h3>${escapeHtml(t('objective'))}</h3><p>${e(p.objective)}</p></section><section><h3>${escapeHtml(t('personalRole'))}</h3><p>${e(p.role)}</p></section></div>
+      <div class="case-metrics">${p.metrics.map(m=>`<div><strong>${e(m.value)}</strong><span>${e(m.label)}</span></div>`).join('')}</div>
+      <h3 class="case-section-title">${escapeHtml(t('approach'))}</h3><div class="case-method">${p.sections.map((s,i)=>`<details ${i===0?'open':''}><summary>${e(s.title)}</summary><p>${e(s.text)}</p></details>`).join('')}</div>
+      ${renderEvidence(p.evidence)}
+      <section class="case-limits"><h3>${escapeHtml(t('limits'))}</h3><p>${e(p.limits)}</p></section>
+      <section class="case-tools"><h3>${escapeHtml(t('tools'))}</h3>${tags(p.tools)}</section>
+      <p class="illustration-note">${escapeHtml(t('illustrationNote'))}</p>
+      <div class="case-actions"><a href="#project-${next.id}" data-open-project="project-${next.id}" class="text-link">${escapeHtml(t('nextProject'))} : ${e(next.title)} ↗</a><a href="mailto:${escapeHtml(content.profile.email)}?subject=${encodeURIComponent(local(p.title))}" class="button button-dark">${escapeHtml(t('discussProject'))}</a></div>`;
+  });
 }
-menuToggle.addEventListener('click', () => setMenu(siteMenu.hidden));
-siteMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false, false)));
-document.querySelector('.brand').addEventListener('click', () => setMenu(false, false));
-document.addEventListener('keydown', event => {
-  if (siteMenu.hidden) return;
-  if (event.key === 'Escape') { event.preventDefault(); setMenu(false); }
-  if (event.key === 'Tab') {
-    const controls = [...document.querySelectorAll('.header-actions button'), ...siteMenu.querySelectorAll('a')];
-    const first = controls[0], last = controls[controls.length - 1];
-    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
-    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+function updateMetadata() {
+  const p = projectFromRoute();
+  const title = p ? `${local(p.title)} | Abderrahmane FERRATI` : t('title');
+  const description = p ? local(p.summary) : t('description');
+  document.title = title;
+  document.querySelector('meta[name="description"]').content = description;
+  document.querySelector('meta[property="og:title"]').content = title;
+  document.querySelector('meta[property="og:description"]').content = description;
+  document.querySelector('meta[property="og:locale"]').content = language==='fr'?'fr_FR':'en_US';
+  // Hash dialogs share one static document: canonicalize the document, keep the full share URL in OG.
+  document.querySelector('link[rel="canonical"]').href = `${baseUrl}?lang=${language}`;
+  document.querySelector('meta[property="og:url"]').content = `${baseUrl}?lang=${language}${p?`#project-${p.id}`:''}`;
+}
+function setLanguage(requested, announce = true) {
+  language = Object.hasOwn(translations, requested) ? requested : 'fr';
+  const copy = translations[language];
+  document.documentElement.lang = language;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const value = copy[el.dataset.i18n];
+    if (value !== undefined) el.textContent = value;
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach(el => {
+    const value=copy[el.dataset.i18nAria]; if(value) el.setAttribute('aria-label',value);
+  });
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => { if(copy[el.dataset.i18nAlt]) el.alt=copy[el.dataset.i18nAlt]; });
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed',String(b.dataset.lang===language)));
+  document.querySelectorAll('.cv-link').forEach(a => { a.href=`cv-${language}.pdf`; a.download=`Abderrahmane-FERRATI-${language==='fr'?'CV-FR':'Resume-EN'}.pdf`; });
+  const availability=content.availability;
+  document.querySelectorAll('[data-availability]').forEach(el => el.textContent=[availability.startLabel,availability.duration,availability.mobility].map(local).filter(Boolean).join(' · '));
+  document.querySelector('[data-i18n="engineeringDate"]').textContent=`${content.profile.engineeringStart} – ${language==='fr'?'en cours':'present'}`;
+  document.querySelector('[data-i18n="institution"]').textContent=`${content.profile.institution} · ${language==='fr'?'Cycle d’ingénieur depuis':'Engineering program since'} ${content.profile.engineeringStart}`;
+  const toggle=document.querySelector('.menu-toggle');
+  if(toggle.getAttribute('aria-expanded')==='true') toggle.setAttribute('aria-label',copy.closeMenu);
+  try { localStorage.setItem('portfolio-language',language); } catch (_) { /* Storage is optional. */ }
+  const url=new URL(location.href);url.searchParams.set('lang',language);
+  try {history.replaceState(history.state,'',url.pathname+url.search+url.hash);} catch (_) { /* File previews. */ }
+  renderProjects();updateMetadata();
+  if(announce) document.getElementById('language-announcement').textContent=copy.announcement;
+}
+const menuToggle=document.querySelector('.menu-toggle'), siteMenu=document.getElementById('site-menu');
+function setMenu(open,restore=true) {
+  siteMenu.hidden=!open;menuToggle.setAttribute('aria-expanded',String(open));
+  menuToggle.setAttribute('aria-label',t(open?'closeMenu':'openMenu'));
+  document.body.classList.toggle('menu-open',open);
+  document.querySelector('main').inert=open;document.querySelector('footer').inert=open;
+  document.querySelector('.quick-nav').inert=open;
+  if(open) siteMenu.querySelector('.menu-inner > a').focus(); else if(restore) menuToggle.focus();
+}
+menuToggle.addEventListener('click',()=>setMenu(siteMenu.hidden));
+siteMenu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>setMenu(false,false)));
+document.querySelector('.brand').addEventListener('click',()=>setMenu(false,false));
+document.addEventListener('keydown',event=>{
+  if(siteMenu.hidden)return;
+  if(event.key==='Escape'){event.preventDefault();setMenu(false);}
+  if(event.key==='Tab'){
+    const controls=[...document.querySelectorAll('.header-actions a,.header-actions button'),...siteMenu.querySelectorAll('a')];
+    const first=controls[0],last=controls.at(-1);
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
   }
 });
-
-document.querySelectorAll('[data-open-project]').forEach(link => {
-  link.addEventListener('click', event => {
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    const dialog = document.getElementById(link.dataset.openProject);
-    if (dialog && !dialog.open) { dialog.showModal(); document.body.classList.add('dialog-open'); }
+function syncRoute() {
+  const routeLang=new URLSearchParams(location.search).get('lang');
+  if(routeLang&&routeLang!==language)setLanguage(routeLang,false);
+  const p=projectFromRoute();
+  let closed=false;
+  document.querySelectorAll('.project-dialog[open]').forEach(dialog=>{
+    if(!p||dialog.id!==`project-${p.id}`){dialog.close();closed=true;}
   });
-});
-document.querySelectorAll('.project-dialog').forEach(dialog => {
-  dialog.querySelector('.close-project').addEventListener('click', () => dialog.close());
-  dialog.addEventListener('close', () => document.body.classList.remove('dialog-open'));
-  dialog.addEventListener('click', event => {
-    if (event.target !== dialog) return;
-    const box = dialog.getBoundingClientRect();
-    if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
-  });
-});
-const directProject = document.getElementById(window.location.hash.slice(1));
-if (directProject && directProject.matches('.project-dialog')) { directProject.showModal(); document.body.classList.add('dialog-open'); }
-
-function updateClock() {
-  const clock = document.querySelector('.local-clock');
-  if (clock) clock.textContent = new Intl.DateTimeFormat(document.documentElement.lang === 'fr' ? 'fr-MA' : 'en-GB', { timeZone: 'Africa/Casablanca', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+  if(p){
+    if(!siteMenu.hidden)setMenu(false,false);
+    const dialog=document.getElementById(`project-${p.id}`);
+    if(!dialog.open){dialog.showModal();dialog.scrollTop=0;dialog.querySelector('h2').focus({preventScroll:true});}
+  } else if(closed) (projectOpener?.isConnected?projectOpener:document.querySelector('.work-card')).focus({preventScroll:true});
+  document.body.classList.toggle('dialog-open',!!p);
+  updateMetadata();
 }
-updateClock();
-setInterval(updateClock, 60000);
-
-if ('IntersectionObserver' in window) {
-  const navLinks = [...document.querySelectorAll('nav a')];
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) navLinks.forEach(link => {
-        const active = link.hash === `#${entry.target.id}`;
-        link.classList.toggle('active', active);
-        if (active) link.setAttribute('aria-current', 'location');
-        else link.removeAttribute('aria-current');
-      });
-    });
-  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
-  document.querySelectorAll('main > section').forEach(section => observer.observe(section));
+function closeProject() {
+  if(history.state?.portfolioModal){history.back();}
+  else { const url=new URL(location.href);url.hash='projects';history.replaceState(history.state,'',url);syncRoute(); }
+}
+document.addEventListener('click',event=>{
+  const langButton=event.target.closest('[data-lang]');
+  if(langButton){setLanguage(langButton.dataset.lang);return;}
+  const link=event.target.closest('[data-open-project]');
+  if(link&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&!event.altKey){
+    event.preventDefault();projectOpener=link;
+    if(location.hash!==link.hash){const url=new URL(location.href);url.hash=link.hash;history.pushState({portfolioModal:true},'',url);}
+    syncRoute();return;
+  }
+  if(event.target.closest('.close-project'))closeProject();
+  const image=event.target.closest('[data-image]');
+  if(image){const viewer=document.getElementById('media-viewer');const img=viewer.querySelector('img');img.src=image.dataset.image;img.alt=image.dataset.alt||'';viewer.querySelector('figcaption').textContent=image.dataset.caption||'';viewer.setAttribute('aria-label',t('openImage'));viewer.showModal();}
+  if(event.target.closest('.close-media'))document.getElementById('media-viewer').close();
+});
+document.querySelectorAll('.project-dialog').forEach(dialog=>{
+  dialog.addEventListener('cancel',event=>{event.preventDefault();closeProject();});
+  dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)closeProject();});
+});
+window.addEventListener('popstate',syncRoute);window.addEventListener('hashchange',syncRoute);
+let initial=new URLSearchParams(location.search).get('lang');
+if(!initial){try{initial=localStorage.getItem('portfolio-language');}catch(_){}}
+setLanguage(initial||'fr',false);syncRoute();
+if('IntersectionObserver' in window){
+  const links=[...document.querySelectorAll('nav a')];
+  const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{
+    if(entry.isIntersecting)links.forEach(a=>{const active=a.hash===`#${entry.target.id}`;a.classList.toggle('active',active);if(active)a.setAttribute('aria-current','location');else a.removeAttribute('aria-current');});
+  }),{rootMargin:'-20% 0px -60% 0px'});
+  document.querySelectorAll('main > section').forEach(s=>observer.observe(s));
 }

@@ -1,46 +1,35 @@
-# Abderrahmane FERRATI — Portfolio
+# Abderrahmane FERRATI - engineering portfolio
 
-A responsive French / English portfolio for electrical engineering and industrial systems control.
+Bilingual FR/EN static portfolio hosted on GitHub Pages. No build step or runtime dependencies.
 
-The editorial layout is inspired by [Asher Vale by Asad Khaleel](https://www.framer.com/marketplace/templates/asher-vale/): off-white background, oversized typography, a fully visible name beside the portrait, image-led project gallery, and full-screen navigation. This site uses a custom static implementation for GitHub Pages.
+## Files
+- `index.html`: semantic homepage and native dialog shells.
+- `content.js`: editable profile, confirmed availability, bilingual case studies and evidence arrays.
+- `script.js`: interface translations, language persistence, accessible menu, hash routing and media rendering.
+- `styles.css`: retained Asher Vale-inspired editorial design and responsive refinements.
+- `cv-fr.pdf`, `cv-en.pdf`: synchronized one-page CV downloads.
+- `portrait.jpg`, `project-*.svg`, `favicon.svg`: preserved original assets. Cover illustrations are conceptual.
 
-**Website:** https://abderrahmaneferrati-etu-ship-it.github.io/
+## Edit content
+Update both `fr` and `en` values in `content.js`. Availability starts in mid-January 2027, for 5-6 months or longer, with open geographic mobility. ENSET starts in 2024; preparatory classes span 2022-2024. Update the French HTML fallback and PDF downloads when changing these facts.
 
-The surname is displayed as **FERRATI** throughout the portfolio. The heading and portrait occupy separate layout areas on desktop and mobile.
+Each project has an `evidence` array, initially empty. Add only authentic documents that you own or are authorized to publish. No employer-sensitive documents are included.
 
-## Features
-
-- Complete French and English versions, selected using the FR / EN buttons.
-- Shareable language URLs: `?lang=fr` and `?lang=en`.
-- Language preference is remembered on the visitor's device.
-- Matching French CV and English résumé downloads.
-- Four accessible project dialogs with technical details and keyboard dismissal.
-- Four original SVG engineering illustrations, clearly identified as illustrative visuals.
-- Full-screen navigation with keyboard focus management.
-- Mobile layout, keyboard navigation, reduced-motion support, and accessible language announcements.
-- Static HTML, CSS, and JavaScript; no build step or server-side services.
-
-## Editing
-
-- `index.html`: page structure and default French content.
-- `script.js`: both language dictionaries and language-switch behavior. Keep matching translation keys in both dictionaries.
-- `styles.css`: layout, typography, and responsive styles.
-- `portrait.jpg`: portrait extracted from the supplied French CV.
-- `project-*.svg`: original conceptual engineering illustrations, not photographs or actual project renders.
-- `cv-fr.pdf` and `cv-en.pdf`: the supplied résumés, unchanged.
-
-The photovoltaic production and demand-coverage figures are simulation estimates from the supplied résumés. The demonstration dashboard is described as in development.
-
-## Hosting
-
-GitHub Pages publishes the `main` branch from the repository root. The `.nojekyll` file keeps this a plain static site. Uploading or committing changes to `main` triggers a Pages deployment.
-
-To preview locally with Python:
-
-```sh
-python -m http.server 4173
+```js
+{ type: 'image', src: 'assets/project/photo.jpg',
+  alt: {fr: 'Description précise', en: 'Precise description'},
+  caption: {fr: 'Contexte, méthode et statut du visuel', en: 'Context, method and status of the image'} }
+{ type: 'pdf', src: 'assets/project/report.pdf',
+  caption: {fr: 'Extrait autorisé du rapport', en: 'Authorized report extract'} }
+{ type: 'video', src: 'assets/project/demo.mp4', poster: 'assets/project/poster.jpg',
+  caption: {fr: 'Simulation commentée', en: 'Narrated simulation'} }
 ```
 
-Open http://localhost:4173/ in a browser.
+Images open in a native fullscreen dialog; PDFs use a direct accessible document link; videos use native controls. Empty arrays produce no empty gallery or placeholders.
 
-Fonts are loaded from Google Fonts, with local sans-serif fallbacks.
+## Preview and deploy
+Run `python -m http.server 4183` in this folder, then visit `http://localhost:4183/`. Publish the root of `main` using GitHub Pages. `.nojekyll` keeps the deployment buildless.
+
+Links such as `/?lang=en#project-pv` open case studies directly. Refresh, browser back/forward and language changes preserve the selected project. Hash views share the homepage canonical document; social crawlers that do not execute JavaScript see the static French metadata. Sitemap lists the two language URLs, not artificial server routes.
+
+The full name and portrait occupy separate layout areas. The surname is always FERRATI. Design inspired by [Asher Vale by Asad Khaleel](https://www.framer.com/marketplace/templates/asher-vale/); custom static implementation.

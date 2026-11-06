@@ -153,7 +153,7 @@ function setLanguage(language, announce = true) {
   });
   document.querySelectorAll('.cv-link').forEach(link => {
     link.href = `cv-${lang}.pdf`;
-    link.download = `Abderrahmane-Ferrati-${lang === 'fr' ? 'CV-FR' : 'Resume-EN'}.pdf`;
+    link.download = `Abderrahmane-FERRATI-${lang === 'fr' ? 'CV-FR' : 'Resume-EN'}.pdf`;
   });
   const metrics = document.querySelectorAll('.pv-metrics strong');
   metrics[0].firstChild.textContent = lang === 'fr' ? '1,20 ' : '1.20 ';

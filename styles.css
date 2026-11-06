@@ -6,3 +6,48 @@
 @media(max-width:760px){html{scroll-padding-top:80px}.section-wrap,.header-inner{width:calc(100% - 40px)}.header-inner{height:62px;font-size:10px;gap:15px}.brand{font-size:13px;gap:7px}.brand-star{font-size:18px}.header-place{display:none}.header-actions{gap:18px}.language-switch{gap:9px}.language-switch button{font-size:10px}.menu-toggle{width:29px}.menu-toggle span{width:18px}.menu-toggle span:nth-child(2){width:24px}.menu-toggle span:nth-child(3){width:12px}.site-menu{inset:62px 0 0}.menu-inner{width:calc(100% - 40px);margin-top:35px}.menu-inner>a{font-size:42px;gap:23px;padding:17px 0}.menu-bottom{flex-direction:column;font-size:11px;gap:20px}.hero{padding-top:25px}.hero-stage{height:435px;align-items:flex-start}.hero h1{font-size:clamp(39px,10.6vw,65px);white-space:normal;text-align:left;line-height:1.07;letter-spacing:-.075em;padding-top:36px}.hero h1>span:first-child{display:block;font-size:1.65em;letter-spacing:-.08em}.hero-dash{display:none}.portrait-wrap{width:172px;top:58%;left:61%;aspect-ratio:.79}.portrait-wrap figcaption{font-size:7px;bottom:-27px;line-height:1.4;max-width:180px}.hero-index{bottom:2px;font-size:7px}.hero-bottom{display:flex;flex-direction:column;align-items:stretch;gap:25px;padding:28px 0 65px}.hero-disciplines{font-size:11px;line-height:1.9}.hero-description{max-width:360px;margin-left:auto;text-align:right}.hero-description p{font-size:15px;letter-spacing:-.045em;line-height:1.5}.text-link{font-size:10px;gap:15px}.section-heading{gap:12px;align-items:baseline;margin-bottom:18px}.section-heading h2{font-size:25px}.section-period{font-size:8px;margin-left:0}.section-heading>.text-link{font-size:8px;gap:6px;max-width:100px;text-align:right}.work-grid{grid-template-columns:1fr;gap:15px}.work-card{aspect-ratio:1.22}.work-caption{left:22px;bottom:24px}.work-title{font-size:29px;max-width:300px}.work-type{font-size:10px}.work-count{left:23px;top:20px;font-size:8px}.work-open{right:24px;bottom:28px}.gallery-note{font-size:8px;line-height:1.6}.profile-section{padding-top:50px}.toolkit-art{height:200px;margin-bottom:40px}.toolkit-art span{font-size:13px;padding:9px 15px}.toolkit-art span:nth-child(1){left:0;top:56%}.toolkit-art span:nth-child(2){left:8%;top:15%}.toolkit-art span:nth-child(3){left:62%;top:10%}.toolkit-art span:nth-child(4){left:72%;top:71%}.toolkit-art span:nth-child(5){left:37%;top:70%}.toolkit-art span:nth-child(6){left:62%;top:43%}.toolkit-art span:nth-child(7){left:17%;top:48%}.profile-grid{grid-template-columns:1fr;gap:38px}.eyebrow{font-size:9px;margin-bottom:17px}.profile-lead{font-size:22px;line-height:1.5}.profile-copy{font-size:16px}.profile-facts{grid-template-columns:1fr 1fr;gap:30px}.profile-facts strong{font-size:31px}.profile-facts>div>span{font-size:10px}.button{font-size:10px;padding:10px 19px}.content-section{padding-top:75px}.content-section .section-heading h2{font-size:26px;max-width:290px}.experience-row{grid-template-columns:1fr;gap:16px;padding:23px 0 29px}.date{font-size:10px}.company{font-size:21px}.company span{display:inline;font-size:11px}.experience-row h3{font-size:12px;max-width:100%}.experience-row>div>p:not(.company){font-size:12px;margin-bottom:5px}.experience-row .text-link{margin-top:6px}.detail-list{font-size:12px}.education-row{gap:18px;flex-wrap:wrap;padding:22px 0}.education-row h3{font-size:18px}.education-row p:not(.date){font-size:11px}.education-row .date{width:100%;margin:0 0 0 27px}.education-dot{margin-right:4px}.skills-grid{grid-template-columns:1fr 1fr;gap:27px 24px}.skill-group{padding-top:17px}.skill-group h3{font-size:15px}.skill-group p{font-size:10px;line-height:1.7;margin:10px 0 12px}.tags{gap:5px}.tags span{font-size:8px;padding:3px 6px}.credentials-grid{grid-template-columns:1fr;gap:35px;margin-top:35px;padding-top:26px}.credentials-block h3{font-size:20px;margin-bottom:21px}.contact-section{padding:90px 0 60px}.contact-headline{gap:16px;padding-bottom:18px}.contact-headline h2{font-size:clamp(53px,14.4vw,85px);letter-spacing:-.075em}.contact-headline>span{font-size:65px}.contact-subline{display:block;margin-top:20px}.contact-subline p{font-size:12px;line-height:1.7;margin-bottom:22px}.contact-subline a{font-size:11px}.footer-grid{grid-template-columns:1fr 1fr;gap:30px 35px;padding-bottom:35px}.footer-grid>div:first-child{grid-column:span 2}.footer-brand{font-size:26px}.footer-grid>div:first-child p{font-size:11px;max-width:270px}.footer-grid>div:not(:first-child)>a{font-size:11px}.footer-label{font-size:10px}.footer-bottom{flex-wrap:wrap;gap:14px 20px;font-size:8px;padding-top:17px}.footer-bottom>a:nth-child(2){order:3;width:100%}.project-dialog{padding:22px 23px 28px;max-height:88svh}.dialog-toolbar{margin-bottom:25px}.project-dialog>h2{font-size:30px;line-height:1.15;margin-bottom:25px}.dialog-body .company{font-size:14px}.experience-top{display:block}.experience-top .date{margin-top:10px}.pv-metrics{margin:22px 0}.pv-metrics>div{padding:18px 8px 18px 0}.pv-metrics strong{font-size:21px}.pv-metrics small{font-size:9px}.pv-metrics span{display:block;font-size:8px;margin-top:6px;line-height:1.5}.dialog-body .detail-list{font-size:12px}.illustration-note{font-size:8px}.close-project{width:30px;height:30px;font-size:13px}}
 @media(max-width:370px){.brand{font-size:11px}.header-actions{gap:12px}.section-heading h2{font-size:23px}.work-title{font-size:25px}.profile-facts{gap:25px 15px}.button{font-size:9px;padding:10px 16px}.contact-headline h2{font-size:48px}.contact-headline>span{font-size:55px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{animation:none!important;transition:none!important}}
+
+/* Give the full name and portrait their own space at every screen size. */
+.hero-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) clamp(220px, 22vw, 284px);
+  gap: clamp(32px, 6vw, 88px);
+  height: auto;
+  min-height: 500px;
+  align-items: center;
+  padding: 42px 0 64px;
+}
+.hero h1 {
+  font-size: clamp(56px, 7.2vw, 104px);
+  line-height: 1.03;
+  letter-spacing: -.075em;
+  white-space: normal;
+  text-align: left;
+  padding: 0;
+}
+.hero h1 > span:first-child {
+  display: block;
+  margin-top: .1em;
+  font-size: 1.18em;
+  letter-spacing: -.06em;
+}
+.portrait-wrap {
+  position: relative;
+  top: auto;
+  left: auto;
+  transform: none;
+  width: 100%;
+  max-width: 284px;
+  margin: 0;
+  animation: none;
+}
+@media(max-width:1100px) {
+  .hero-stage { grid-template-columns: minmax(0, 1fr) 220px; gap: 40px; min-height: 420px; }
+  .hero h1 { font-size: clamp(52px, 7vw, 80px); }
+}
+@media(max-width:760px) {
+  .hero-stage { grid-template-columns: minmax(0, 1fr); gap: 30px; min-height: 0; padding: 26px 0 60px; }
+  .hero h1 { font-size: clamp(36px, 10.2vw, 64px); }
+  .hero h1 > span:first-child { font-size: 1.4em; }
+  .portrait-wrap { width: 200px; max-width: 70%; justify-self: center; }
+}

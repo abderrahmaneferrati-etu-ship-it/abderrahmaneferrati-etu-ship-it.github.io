@@ -2,9 +2,11 @@
 
 A responsive French / English portfolio for electrical engineering and industrial systems control.
 
-The editorial layout is inspired by [Asher Vale by Asad Khaleel](https://www.framer.com/marketplace/templates/asher-vale/): off-white background, oversized typography, layered portrait, image-led project gallery, and full-screen navigation. This site uses a custom static implementation for GitHub Pages.
+The editorial layout is inspired by [Asher Vale by Asad Khaleel](https://www.framer.com/marketplace/templates/asher-vale/): off-white background, oversized typography, a fully visible name beside the portrait, image-led project gallery, and full-screen navigation. This site uses a custom static implementation for GitHub Pages.
 
 **Website:** https://abderrahmaneferrati-etu-ship-it.github.io/
+
+The surname is displayed as **FERRATI** throughout the portfolio. The heading and portrait occupy separate layout areas on desktop and mobile.
 
 ## Features
 

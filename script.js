@@ -276,6 +276,19 @@ document.addEventListener('click',event=>{
 });
 document.querySelectorAll('.project-dialog').forEach(dialog=>{
   dialog.addEventListener('cancel',event=>{event.preventDefault();closeProject();});
+  dialog.addEventListener('close',()=>{
+    // Wait for the native dialog's own focus restoration before restoring our route opener.
+    if(!projectFromRoute()) requestAnimationFrame(()=>{
+      if(!projectFromRoute()) (projectOpener?.isConnected?projectOpener:document.querySelector('.work-card')).focus({preventScroll:true});
+    });
+  });
+  dialog.addEventListener('keydown',event=>{
+    if(event.key!=='Tab')return;
+    const controls=[...dialog.querySelectorAll('a[href],button,summary')].filter(el=>el.getClientRects().length);
+    const first=controls[0],last=controls.at(-1);
+    if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+    else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+  });
   dialog.addEventListener('click',event=>{if(event.target!==dialog)return;const b=dialog.getBoundingClientRect();if(event.clientX<b.left||event.clientX>b.right||event.clientY<b.top||event.clientY>b.bottom)closeProject();});
 });
 window.addEventListener('popstate',syncRoute);window.addEventListener('hashchange',syncRoute);

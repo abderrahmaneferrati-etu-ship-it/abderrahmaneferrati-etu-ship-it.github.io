@@ -2,6 +2,8 @@
 
 A responsive French / English portfolio for electrical engineering and industrial systems control.
 
+The editorial layout is inspired by [Asher Vale by Asad Khaleel](https://www.framer.com/marketplace/templates/asher-vale/): off-white background, oversized typography, layered portrait, image-led project gallery, and full-screen navigation. This site uses a custom static implementation for GitHub Pages.
+
 **Website:** https://abderrahmaneferrati-etu-ship-it.github.io/
 
 ## Features
@@ -10,6 +12,9 @@ A responsive French / English portfolio for electrical engineering and industria
 - Shareable language URLs: `?lang=fr` and `?lang=en`.
 - Language preference is remembered on the visitor's device.
 - Matching French CV and English résumé downloads.
+- Four accessible project dialogs with technical details and keyboard dismissal.
+- Four original SVG engineering illustrations, clearly identified as illustrative visuals.
+- Full-screen navigation with keyboard focus management.
 - Mobile layout, keyboard navigation, reduced-motion support, and accessible language announcements.
 - Static HTML, CSS, and JavaScript; no build step or server-side services.
 
@@ -19,6 +24,7 @@ A responsive French / English portfolio for electrical engineering and industria
 - `script.js`: both language dictionaries and language-switch behavior. Keep matching translation keys in both dictionaries.
 - `styles.css`: layout, typography, and responsive styles.
 - `portrait.jpg`: portrait extracted from the supplied French CV.
+- `project-*.svg`: original conceptual engineering illustrations, not photographs or actual project renders.
 - `cv-fr.pdf` and `cv-en.pdf`: the supplied résumés, unchanged.
 
 The photovoltaic production and demand-coverage figures are simulation estimates from the supplied résumés. The demonstration dashboard is described as in development.

@@ -91,6 +91,45 @@ const translations = {
   }
 };
 
+Object.assign(translations.fr, {
+  shortAvailability: 'Disponible pour un stage PFE', clockLabel: 'Heure au Maroc',
+  openMenu: 'Ouvrir le menu', closeMenu: 'Fermer le menu', menuLabel: 'Explorer',
+  navHome: 'Accueil', navAbout: 'À propos',
+  heroPortraitCaption: 'Génie électrique & contrôle industriel',
+  discipline1: 'Génie électrique', discipline2: 'Automatisme industriel', discipline3: 'Énergies renouvelables',
+  newHeroIntro: 'Je modélise, analyse et conçois des systèmes électriques et industriels, avec un intérêt particulier pour l’automatisation et la transition énergétique.',
+  discoverProjects: 'Découvrir mes projets', selectedWorks: 'Sélection de projets', seeExperience: 'Voir mon parcours',
+  solarTitle: 'Centrale photovoltaïque industrielle', projectIllustration: 'Illustration conceptuelle du projet', viewProject: 'Voir le projet ↗',
+  galleryNote: 'Visuels illustratifs · Ouvrez un projet pour découvrir sa démarche et ses détails techniques.',
+  whoAmI: 'À propos de moi',
+  profileLead: 'Élève-ingénieur à l’ENSET Mohammedia, je m’intéresse à la façon dont l’énergie, la commande et les systèmes industriels fonctionnent ensemble.',
+  profileCopy: 'Mes stages chez YAZAKI et à l’ONCF ont nourri cette curiosité. Je recherche un projet de fin d’études pour approfondir mes connaissances et les appliquer dans un environnement industriel.',
+  internshipCount: 'Stages en industrie', academicCount: 'Projets académiques', englishLevel: 'Anglais · EF SET',
+  letsTalk: 'Parlons-en.', footerIntro: 'Génie électrique. Systèmes industriels. Nouvelles perspectives.',
+  footerMenu: 'Navigation', footerConnect: 'Contact', footerEmail: 'E-mail ↗',
+  designCredit: 'Design inspiré d’Asher Vale par Asad Khaleel', projectDetails: 'Détails du projet', closeProject: 'Fermer le projet',
+  illustrationNote: 'Les visuels sont des illustrations du projet. Les détails techniques proviennent de mon CV.'
+});
+Object.assign(translations.en, {
+  shortAvailability: 'Available for a final-year internship', clockLabel: 'Time in Morocco',
+  openMenu: 'Open menu', closeMenu: 'Close menu', menuLabel: 'Explore',
+  navHome: 'Home', navAbout: 'About',
+  heroPortraitCaption: 'Electrical Engineering & Industrial Control',
+  discipline1: 'Electrical Engineering', discipline2: 'Industrial Automation', discipline3: 'Renewable Energy',
+  newHeroIntro: 'I model, analyze, and design electrical and industrial systems, with a particular interest in automation and the energy transition.',
+  discoverProjects: 'Explore my projects', selectedWorks: 'Selected projects', seeExperience: 'View my background',
+  solarTitle: 'Industrial rooftop solar system', projectIllustration: 'Conceptual project illustration', viewProject: 'View project ↗',
+  galleryNote: 'Illustrative visuals · Open a project to explore the approach and technical details.',
+  whoAmI: 'About me',
+  profileLead: 'As an engineering student at ENSET Mohammedia, I am interested in how energy, control, and industrial systems work together.',
+  profileCopy: 'My internships at YAZAKI and ONCF have deepened this curiosity. I am seeking a final-year project internship to expand my knowledge and apply it in an industrial environment.',
+  internshipCount: 'Industry internships', academicCount: 'Academic projects', englishLevel: 'English · EF SET',
+  letsTalk: 'Let’s talk.', footerIntro: 'Electrical engineering. Industrial systems. New possibilities.',
+  footerMenu: 'Navigation', footerConnect: 'Connect', footerEmail: 'Email ↗',
+  designCredit: 'Design inspired by Asher Vale by Asad Khaleel', projectDetails: 'Project details', closeProject: 'Close project',
+  illustrationNote: 'The visuals are project illustrations. Technical details are based on my résumé.'
+});
+
 function setLanguage(language, announce = true) {
   const lang = Object.hasOwn(translations, language) ? language : 'fr';
   const copy = translations[lang];
@@ -107,6 +146,8 @@ function setLanguage(language, announce = true) {
   document.querySelectorAll('[data-i18n-alt]').forEach(element => {
     element.alt = copy[element.dataset.i18nAlt];
   });
+  const toggle = document.querySelector('.menu-toggle');
+  if (toggle && toggle.getAttribute('aria-expanded') === 'true') toggle.setAttribute('aria-label', copy.closeMenu);
   document.querySelectorAll('[data-lang]').forEach(button => {
     button.setAttribute('aria-pressed', String(button.dataset.lang === lang));
   });
@@ -134,8 +175,61 @@ if (!initialLanguage) {
 }
 setLanguage(initialLanguage || 'fr', false);
 document.querySelectorAll('[data-lang]').forEach(button => {
-  button.addEventListener('click', () => setLanguage(button.dataset.lang));
+  button.addEventListener('click', () => { setLanguage(button.dataset.lang); updateClock(); });
 });
+
+const menuToggle = document.querySelector('.menu-toggle');
+const siteMenu = document.getElementById('site-menu');
+function setMenu(open, restoreFocus = true) {
+  siteMenu.hidden = !open;
+  menuToggle.setAttribute('aria-expanded', String(open));
+  menuToggle.setAttribute('aria-label', translations[document.documentElement.lang][open ? 'closeMenu' : 'openMenu']);
+  document.body.classList.toggle('menu-open', open);
+  document.querySelector('main').inert = open;
+  document.querySelector('footer').inert = open;
+  if (open) siteMenu.querySelector('.menu-inner > a').focus();
+  else if (restoreFocus) menuToggle.focus();
+}
+menuToggle.addEventListener('click', () => setMenu(siteMenu.hidden));
+siteMenu.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false, false)));
+document.querySelector('.brand').addEventListener('click', () => setMenu(false, false));
+document.addEventListener('keydown', event => {
+  if (siteMenu.hidden) return;
+  if (event.key === 'Escape') { event.preventDefault(); setMenu(false); }
+  if (event.key === 'Tab') {
+    const controls = [...document.querySelectorAll('.header-actions button'), ...siteMenu.querySelectorAll('a')];
+    const first = controls[0], last = controls[controls.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+});
+
+document.querySelectorAll('[data-open-project]').forEach(link => {
+  link.addEventListener('click', event => {
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    const dialog = document.getElementById(link.dataset.openProject);
+    if (dialog && !dialog.open) { dialog.showModal(); document.body.classList.add('dialog-open'); }
+  });
+});
+document.querySelectorAll('.project-dialog').forEach(dialog => {
+  dialog.querySelector('.close-project').addEventListener('click', () => dialog.close());
+  dialog.addEventListener('close', () => document.body.classList.remove('dialog-open'));
+  dialog.addEventListener('click', event => {
+    if (event.target !== dialog) return;
+    const box = dialog.getBoundingClientRect();
+    if (event.clientX < box.left || event.clientX > box.right || event.clientY < box.top || event.clientY > box.bottom) dialog.close();
+  });
+});
+const directProject = document.getElementById(window.location.hash.slice(1));
+if (directProject && directProject.matches('.project-dialog')) { directProject.showModal(); document.body.classList.add('dialog-open'); }
+
+function updateClock() {
+  const clock = document.querySelector('.local-clock');
+  if (clock) clock.textContent = new Intl.DateTimeFormat(document.documentElement.lang === 'fr' ? 'fr-MA' : 'en-GB', { timeZone: 'Africa/Casablanca', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' }).format(new Date());
+}
+updateClock();
+setInterval(updateClock, 60000);
 
 if ('IntersectionObserver' in window) {
   const navLinks = [...document.querySelectorAll('nav a')];

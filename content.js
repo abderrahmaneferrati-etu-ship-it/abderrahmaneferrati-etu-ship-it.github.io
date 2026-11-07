@@ -1,5 +1,5 @@
 'use strict';
-// Editable bilingual profile, availability and case studies. Publish only authorized evidence.
+// Bilingual profile, case studies and authentic project evidence.
 window.portfolioData = {
   "profile": {
     "name": "Abderrahmane FERRATI",
@@ -165,20 +165,20 @@ window.portfolioData = {
         "en": "Academic project · Siemens S7-300"
       },
       "summary": {
-        "fr": "Étude de séquences de commande, programmation LADDER et simulation des modes de fonctionnement.",
-        "en": "Control-sequence study, LADDER programming and simulation of operating modes."
+        "fr": "Conception et simulation d’une machine à trois postes : transfert, remplissage volumétrique et bouchage, pilotés par un Siemens S7-300.",
+        "en": "Design and simulation of a three-station machine: transfer, volumetric filling and capping, controlled by a Siemens S7-300."
       },
       "role": {
-        "fr": "Projet individuel : GRAFCET PO/PC, programmation STEP 7, étude du câblage et simulation.",
-        "en": "Individual project: PO/PC GRAFCET, STEP 7 programming, wiring study and simulation."
+        "fr": "Projet individuel : analyse du cahier des charges, GRAFCET PO/PC, définition des E/S, programmation LADDER sous STEP 7 et simulation couplée PLCSim/FluidSim.",
+        "en": "Individual project: requirements analysis, PO/PC GRAFCET, I/O definition, LADDER programming in STEP 7 and coupled PLCSim/FluidSim simulation."
       },
       "status": {
-        "fr": "Programmation · Simulation",
-        "en": "Programming · Simulation"
+        "fr": "Conception de commande · Programmation · Simulation couplée",
+        "en": "Control design · Programming · Coupled simulation"
       },
       "objective": {
-        "fr": "Décrire et programmer la séquence de remplissage et de bouchage, puis étudier son comportement dans différents modes.",
-        "en": "Describe and program the filling and capping sequence, then study its behavior in different operating modes."
+        "fr": "Automatiser le cycle de remplissage et de bouchage et vérifier sa cohérence dans les modes automatique, défaut et manuel.",
+        "en": "Automate the filling and capping cycle and check its consistency in automatic, fault and manual modes."
       },
       "metrics": [
         {
@@ -187,34 +187,60 @@ window.portfolioData = {
             "fr": "Automate étudié",
             "en": "PLC studied"
           }
+        },
+        {
+          "value": "3",
+          "label": {
+            "fr": "Postes du procédé",
+            "en": "Process stations"
+          }
+        },
+        {
+          "value": "3",
+          "label": {
+            "fr": "Modes de fonctionnement",
+            "en": "Operating modes"
+          }
         }
       ],
       "tools": [
+        "Siemens S7-300",
         "STEP 7",
         "GRAFCET PO/PC",
         "LADDER",
         "PLCSim",
-        "FluidSim"
+        "FluidSim",
+        "EzOPC"
       ],
       "sections": [
         {
           "title": {
-            "fr": "Procédé et architecture de commande",
-            "en": "Process and control architecture"
+            "fr": "Procédé et cahier des charges",
+            "en": "Process and requirements"
           },
           "text": {
-            "fr": "Le procédé associe remplissage et bouchage sous la commande d’un Siemens S7-300. Le GRAFCET PO/PC structure les séquences avant leur traduction en LADDER.",
-            "en": "The process combines filling and capping under Siemens S7-300 control. PO/PC GRAFCET structures the sequences before their translation into LADDER."
+            "fr": "Le cycle associe un poste de transfert et chargement, un doseur volumétrique pour le remplissage, puis un poste de bouchage. Le fonctionnement des vérins, de la vanne et du moteur pneumatique doit être synchronisé avec les capteurs.",
+            "en": "The cycle combines transfer and loading, volumetric dosing for filling, and a capping station. Cylinders, valve and pneumatic motor must be synchronized with sensor signals."
           }
         },
         {
           "title": {
-            "fr": "Programmation et schémas",
-            "en": "Programming and diagrams"
+            "fr": "GRAFCET PO et PC",
+            "en": "PO and PC GRAFCET"
           },
           "text": {
-            "fr": "Programmation LADDER sous STEP 7 et étude du câblage électrique. Les références détaillées des capteurs, actionneurs et adresses d’entrées/sorties ne sont pas publiées ici.",
-            "en": "LADDER programming in STEP 7 and electrical wiring study. Detailed sensor, actuator and I/O address references are not published here."
+            "fr": "La partie opérative est décrite par un GRAFCET de 18 étapes et 18 transitions. Le GRAFCET de commande traduit ensuite les conditions de transition et la synchronisation en logique exploitable par l’automate.",
+            "en": "The operating sequence is described by a GRAFCET with 18 steps and 18 transitions. The control GRAFCET then translates transition conditions and synchronization into PLC logic."
+          }
+        },
+        {
+          "title": {
+            "fr": "Entrées/sorties et programmation",
+            "en": "I/O and programming"
+          },
+          "text": {
+            "fr": "Définition des mnémoniques et des adresses d’E/S pour le SIMATIC S7-300 CPU 314C-2DP, puis programmation LADDER sous STEP 7. Le rapport relie notamment le capteur A0 à I124.0 et la commande A+ à Q124.0.",
+            "en": "Definition of symbols and I/O addresses for the SIMATIC S7-300 CPU 314C-2DP, followed by LADDER programming in STEP 7. The report maps sensor A0 to I124.0 and command A+ to Q124.0."
           }
         },
         {
@@ -223,124 +249,270 @@ window.portfolioData = {
             "en": "Modes and fault handling"
           },
           "text": {
-            "fr": "Étude des modes normal, manuel et défaut, ainsi que d’un scénario d’arrêt d’urgence simulé.",
-            "en": "Study of normal, manual and fault modes, plus a simulated emergency-stop scenario."
+            "fr": "Le mode normal exécute le cycle complet. En absence de bouchons, un mode dégradé permet le traitement prévu avec acquittement. Le mode manuel sert à la remise à zéro après un arrêt d’urgence simulé. L’arrêt normal termine le cycle en cours.",
+            "en": "Normal mode runs the complete cycle. Missing caps trigger the specified degraded mode and acknowledgement sequence. Manual mode supports resetting after a simulated emergency stop. A normal stop completes the current cycle."
           }
         },
         {
           "title": {
-            "fr": "Simulation",
-            "en": "Simulation"
+            "fr": "Simulation PLCSim, FluidSim et EzOPC",
+            "en": "PLCSim, FluidSim and EzOPC simulation"
           },
           "text": {
-            "fr": "Simulations intégrées sous PLCSim et FluidSim pour examiner la logique et les scénarios de fonctionnement.",
-            "en": "Integrated PLCSim and FluidSim simulations to examine the logic and operating scenarios."
+            "fr": "PLCSim exécute la logique de l’automate et FluidSim représente la partie opérative électropneumatique. Le serveur Festo EzOPC assure les échanges d’E/S virtuelles. Les essais portent sur le cycle, les défauts et la priorité des modes.",
+            "en": "PLCSim executes the PLC logic while FluidSim represents the electropneumatic process. Festo EzOPC exchanges virtual I/O signals. Simulation tests cover the cycle, faults and mode priorities."
+          }
+        },
+        {
+          "title": {
+            "fr": "Résultats et points d’attention",
+            "en": "Results and engineering challenges"
+          },
+          "text": {
+            "fr": "Le rapport documente le déroulement du cycle automatique et les réactions aux scénarios simulés. La synchronisation des étapes, l’adressage OPC et les priorités entre modes ont constitué les principaux points de mise au point.",
+            "en": "The report documents automatic-cycle behavior and responses to simulated scenarios. Step synchronization, OPC addressing and priorities between modes were the main implementation challenges."
           }
         }
       ],
       "limits": {
-        "fr": "La simulation ne démontre ni une mise en service sur ligne réelle, ni une fonction d’arrêt d’urgence certifiée. Aucun résultat de test matériel n’est présenté.",
-        "en": "Simulation does not demonstrate commissioning on a real line or a certified emergency-stop function. No hardware test results are presented."
+        "fr": "La validation présentée est une simulation couplée. Une maquette physique reste une étape complémentaire ; le scénario d’arrêt d’urgence simulé ne constitue pas une certification de sécurité fonctionnelle.",
+        "en": "The validation presented is a coupled simulation. A physical demonstrator remains a further step; the simulated emergency-stop scenario does not constitute functional-safety certification."
       },
-      "cover": "project-automation.svg",
-      "evidence": []
+      "cover": "evidence-automation-process.webp",
+      "evidence": [
+        {
+          "type": "image",
+          "src": "evidence-automation-process.webp",
+          "width": 907,
+          "height": 689,
+          "sourcePage": 12,
+          "caption": {
+            "fr": "Procédé à trois postes : transfert, remplissage et bouchage. Rapport, figure 4, p. 12.",
+            "en": "Three-station process: transfer, filling and capping. Report, figure 4, p. 12."
+          },
+          "alt": {
+            "fr": "Schéma de principe du procédé",
+            "en": "Process overview diagram"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-automation-io.webp",
+          "width": 1004,
+          "height": 1010,
+          "sourcePage": 16,
+          "caption": {
+            "fr": "Extrait du tableau des mnémoniques STEP 7 : capteurs, commandes et adresses d’E/S. Rapport, p. 16.",
+            "en": "Extract from the STEP 7 symbol table: sensors, commands and I/O addresses. Report, p. 16."
+          },
+          "alt": {
+            "fr": "Tableau des entrées et sorties STEP 7",
+            "en": "STEP 7 input and output table"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-automation-wiring.webp",
+          "width": 794,
+          "height": 955,
+          "sourcePage": 37,
+          "caption": {
+            "fr": "Schéma de câblage de la partie commande autour du S7-300. Rapport, figure 7, p. 37.",
+            "en": "Control wiring diagram around the S7-300. Report, figure 7, p. 37."
+          },
+          "alt": {
+            "fr": "Schéma de câblage du S7-300",
+            "en": "S7-300 wiring diagram"
+          }
+        }
+      ],
+      "coverAlt": {
+        "fr": "Schéma de principe de la machine de remplissage et bouchage, extrait du rapport académique",
+        "en": "Filling and capping process diagram from the academic report"
+      },
+      "coverNote": {
+        "fr": "Schéma de principe extrait du rapport académique : il représente le procédé étudié et simulé.",
+        "en": "Process diagram extracted from the academic report: it represents the process studied and simulated."
+      }
     },
     {
       "id": "power",
       "title": {
-        "fr": "Convertisseur Push-Pull 24 V / 15 V",
-        "en": "24 V / 15 V Push-Pull converter"
+        "fr": "Convertisseur Push-Pull à UC2525",
+        "en": "UC2525 Push-Pull converter"
       },
       "context": {
         "fr": "Projet académique · Électronique de puissance",
         "en": "Academic project · Power electronics"
       },
       "summary": {
-        "fr": "Conception et simulation d’une conversion DC/DC à 50 kHz, avec étude du circuit imprimé.",
-        "en": "Design and simulation of 50 kHz DC/DC conversion, including PCB design."
+        "fr": "Conception d’une alimentation Push-Pull : dimensionnement de puissance, commande PWM, simulation Proteus et conception du circuit imprimé.",
+        "en": "Push-Pull power-supply design: power-stage sizing, PWM control, Proteus simulation and PCB design."
       },
       "role": {
-        "fr": "Projet individuel : conception du circuit, simulation Proteus et routage PCB sous ARES.",
-        "en": "Individual project: circuit design, Proteus simulation and PCB layout in ARES."
+        "fr": "Projet individuel : étude de la topologie, dimensionnement des composants et du transformateur, commande UC2525, simulation sous ISIS et routage du PCB sous ARES.",
+        "en": "Individual project: topology study, component and transformer sizing, UC2525 control, ISIS simulation and PCB layout in ARES."
       },
       "status": {
         "fr": "Conception · Simulation · PCB",
         "en": "Design · Simulation · PCB"
       },
       "objective": {
-        "fr": "Étudier une conversion de 24 V DC vers 15 V DC avec une topologie Push-Pull commandée à 50 kHz.",
-        "en": "Study 24 V DC to 15 V DC conversion using a Push-Pull topology controlled at 50 kHz."
+        "fr": "Étudier et concevoir une conversion DC/DC isolée à partir d’une source de 24 V, avec des sorties ±15 V visées dans le rapport, en reliant les calculs, la simulation et le PCB.",
+        "en": "Study and design isolated DC/DC conversion from a 24 V source, with ±15 V outputs targeted in the report, connecting calculations, simulation and PCB design."
       },
       "metrics": [
         {
-          "value": "24 V → 15 V",
+          "value": "24 V",
           "label": {
-            "fr": "Objectif de conversion",
-            "en": "Conversion target"
+            "fr": "Source DC de l’étude",
+            "en": "Study DC input"
+          }
+        },
+        {
+          "value": "±15 V",
+          "label": {
+            "fr": "Sorties visées dans le rapport",
+            "en": "Output targets in the report"
           }
         },
         {
           "value": "50 kHz",
           "label": {
-            "fr": "Fréquence de découpage étudiée",
-            "en": "Studied switching frequency"
+            "fr": "Fréquence cible de l’étude",
+            "en": "Study switching-frequency target"
           }
         }
       ],
       "tools": [
+        "UC2525",
         "Proteus ISIS",
         "ARES",
-        "UC2525",
-        "IRF3205"
+        "IRF3205",
+        "Schottky"
       ],
       "sections": [
         {
           "title": {
-            "fr": "Topologie et architecture",
-            "en": "Topology and architecture"
+            "fr": "Principe et architecture de puissance",
+            "en": "Principle and power architecture"
           },
           "text": {
-            "fr": "Topologie Push-Pull comprenant un transformateur haute fréquence, des MOSFET IRF3205 et un redressement par diodes Schottky.",
-            "en": "Push-Pull topology including a high-frequency transformer, IRF3205 MOSFETs and Schottky diode rectification."
+            "fr": "Étude de l’alimentation alternée des demi-primaires d’un transformateur à point milieu, puis du redressement et du filtrage LC en sortie. La démarche relie les phases de commutation aux grandeurs électriques du convertisseur.",
+            "en": "Study of alternating excitation of a center-tapped transformer primary, followed by rectification and output LC filtering. The approach connects switching phases with the converter’s electrical quantities."
           }
         },
         {
           "title": {
-            "fr": "Commande PWM",
-            "en": "PWM control"
+            "fr": "Dimensionnement des composants",
+            "en": "Component sizing"
           },
           "text": {
-            "fr": "Étude de la commande par UC2525 pour le fonctionnement à 50 kHz. Les valeurs de courant maximal et de puissance ne sont pas revendiquées.",
-            "en": "Study of UC2525 control for 50 kHz operation. No maximum current or power rating is claimed."
+            "fr": "Analyse des contraintes des MOSFETs, choix des IRF3205, dimensionnement du transformateur haute fréquence et étude des diodes de redressement. Le rapport présente aussi les hypothèses de calcul des pertes et des courants.",
+            "en": "Analysis of MOSFET stresses, IRF3205 selection, high-frequency transformer sizing and rectifier-diode study. The report also sets out assumptions used for loss and current calculations."
           }
         },
         {
           "title": {
-            "fr": "Simulation et conception PCB",
-            "en": "Simulation and PCB design"
+            "fr": "Commande PWM et séquencement",
+            "en": "PWM control and sequencing"
           },
           "text": {
-            "fr": "Simulation du circuit sous Proteus ISIS et conception du circuit imprimé sous ARES. Ces travaux sont distincts de la fabrication d’une carte.",
-            "en": "Circuit simulation in Proteus ISIS and PCB layout in ARES. These activities are distinct from manufacturing a board."
+            "fr": "Étude de la commande UC2525 : oscillateur RT/CT, sorties alternées, temps mort, démarrage progressif et boucle de retour. Ces fonctions organisent la commutation des deux interrupteurs.",
+            "en": "Study of UC2525 control: RT/CT oscillator, alternating outputs, dead time, soft-start and feedback. These functions organize switching of the two power devices."
           }
         },
         {
           "title": {
-            "fr": "Protections étudiées",
-            "en": "Protection concepts studied"
+            "fr": "Simulation sous Proteus ISIS",
+            "en": "Proteus ISIS simulation"
           },
           "text": {
-            "fr": "Étude de concepts de protection contre les surintensités et la surchauffe, ainsi que du démarrage progressif.",
-            "en": "Study of overcurrent and overtemperature protection concepts, together with soft-start."
+            "fr": "Saisie du schéma complet, paramétrage des sources et des modèles de composants, puis analyse des blocs de commande, de puissance et de sortie dans l’environnement de simulation.",
+            "en": "Capture of the complete circuit, configuration of sources and component models, and analysis of the control, power and output blocks in the simulation environment."
+          }
+        },
+        {
+          "title": {
+            "fr": "Conception PCB sous ARES",
+            "en": "ARES PCB design"
+          },
+          "text": {
+            "fr": "Passage du schéma à l’implantation et au routage : organisation des composants, séparation des chemins de puissance et de signal, réduction des boucles et visualisation 3D du PCB.",
+            "en": "Transition from schematic to placement and routing: component organization, separation of power and signal paths, loop reduction and 3D PCB visualization."
+          }
+        },
+        {
+          "title": {
+            "fr": "Livrables documentés",
+            "en": "Documented deliverables"
+          },
+          "text": {
+            "fr": "Rapport technique, calculs de dimensionnement, schéma de simulation, routage 2D et rendu 3D. Les vues ci-dessous sont extraites du travail fourni, et non des illustrations générées.",
+            "en": "Technical report, sizing calculations, simulation schematic, 2D layout and 3D render. The views below are extracted from the supplied work rather than generated illustrations."
           }
         }
       ],
       "limits": {
-        "fr": "Aucune efficacité, ondulation de sortie, mesure thermique ou validation sur prototype n’est annoncée. Les résultats présentés restent au niveau conception et simulation.",
-        "en": "No efficiency, output ripple, thermal measurement or prototype validation is claimed. The work presented remains at design and simulation level."
+        "fr": "Les éléments disponibles documentent la conception, la simulation et le PCB. Les hypothèses de dimensionnement ne sont pas des mesures de rendement ; les essais sur carte fabriquée restent distincts de ces résultats de conception.",
+        "en": "The available material documents design, simulation and PCB layout. Sizing assumptions are not measured efficiency; tests on a manufactured board remain distinct from these design results."
       },
-      "cover": "project-converter.svg",
-      "evidence": []
+      "cover": "evidence-power-3d.webp",
+      "evidence": [
+        {
+          "type": "image",
+          "src": "evidence-power-schematic.webp",
+          "width": 1077,
+          "height": 600,
+          "sourcePage": 28,
+          "caption": {
+            "fr": "Schéma du convertisseur simulé sous Proteus ISIS. Rapport, figure 4.2, p. 28.",
+            "en": "Converter schematic simulated in Proteus ISIS. Report, figure 4.2, p. 28."
+          },
+          "alt": {
+            "fr": "Schéma de simulation du convertisseur Push-Pull",
+            "en": "Push-Pull converter simulation schematic"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-power-pcb.webp",
+          "width": 1077,
+          "height": 558,
+          "sourcePage": 30,
+          "caption": {
+            "fr": "Routage 2D sous ARES : implantation des composants et pistes du PCB. Rapport, figure 4.3, p. 30.",
+            "en": "ARES 2D layout: component placement and PCB traces. Report, figure 4.3, p. 30."
+          },
+          "alt": {
+            "fr": "Routage du PCB sous ARES",
+            "en": "ARES PCB layout"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-power-3d.webp",
+          "width": 1077,
+          "height": 482,
+          "sourcePage": 31,
+          "caption": {
+            "fr": "Visualisation 3D du PCB assemblé virtuellement. Rapport, figure 4.4, p. 31.",
+            "en": "3D visualization of the virtually assembled PCB. Report, figure 4.4, p. 31."
+          },
+          "alt": {
+            "fr": "Rendu 3D du circuit imprimé",
+            "en": "3D PCB render"
+          }
+        }
+      ],
+      "coverAlt": {
+        "fr": "Rendu 3D du PCB du convertisseur dans Proteus ARES",
+        "en": "3D render of the converter PCB in Proteus ARES"
+      },
+      "coverNote": {
+        "fr": "Le visuel de couverture est un rendu 3D du PCB extrait du rapport, et non une photographie d’une carte fabriquée.",
+        "en": "The cover visual is a 3D PCB render extracted from the report, rather than a photograph of a manufactured board."
+      }
     },
     {
       "id": "bench",
@@ -353,87 +525,324 @@ window.portfolioData = {
         "en": "Group academic project · Electrotechnics"
       },
       "summary": {
-        "fr": "Rétro-ingénierie d’un banc pédagogique triphasé et étude d’une architecture modulaire.",
-        "en": "Reverse engineering of a three-phase educational bench and study of a modular architecture."
+        "fr": "Rétro-ingénierie, conception et réalisation d’un banc pédagogique fonctionnel, avec essais pratiques et supports pour plus de 12 TP.",
+        "en": "Reverse engineering, design and construction of a working educational bench, with practical tests and materials for more than 12 laboratory exercises."
       },
       "role": {
-        "fr": "Travail en groupe. Ma contribution : analyse du banc existant, étude de l’architecture modulaire, reconception sous SolidWorks et étude du redresseur à six diodes.",
-        "en": "Group work. My contribution: analysis of the existing bench, study of the modular architecture, SolidWorks redesign and study of the six-diode rectifier."
+        "fr": "Projet en groupe. Ma contribution porte sur l’analyse du banc, l’architecture modulaire, la reconception sous SolidWorks et le redressement. Le travail a été mené en équipe jusqu’à l’approvisionnement, au montage, aux essais et aux supports pédagogiques.",
+        "en": "Group project. My contribution covers bench analysis, modular architecture, SolidWorks redesign and rectification. The team carried the work through component sourcing, assembly, tests and teaching materials."
       },
       "status": {
-        "fr": "Rétro-ingénierie · Conception",
-        "en": "Reverse engineering · Design"
+        "fr": "Prototype fonctionnel · Validation pratique · Documentation",
+        "en": "Working prototype · Practical validation · Documentation"
       },
       "objective": {
-        "fr": "Étudier une architecture permettant différentes configurations pédagogiques monophasées et triphasées.",
-        "en": "Study an architecture enabling different single-phase and three-phase educational configurations."
+        "fr": "Concevoir et construire un banc modulaire utilisable en travaux pratiques d’électrotechnique, en reliant les calculs théoriques à la manipulation et à la mesure.",
+        "en": "Design and build a modular bench for electrotechnical laboratory work, connecting theoretical calculations with hands-on experiments and measurements."
       },
       "metrics": [
         {
+          "value": "1",
+          "label": {
+            "fr": "Prototype fonctionnel réalisé",
+            "en": "Working prototype built"
+          }
+        },
+        {
+          "value": {
+            "fr": "Plus de 12",
+            "en": "Over 12"
+          },
+          "label": {
+            "fr": "TP documentés dans le manuel",
+            "en": "Laboratory exercises documented"
+          }
+        },
+        {
           "value": "3 × 100 VA",
           "label": {
-            "fr": "Transformateurs monophasés considérés",
-            "en": "Single-phase transformers considered"
+            "fr": "Transformateurs monophasés du banc",
+            "en": "Bench single-phase transformers"
           }
         }
       ],
       "tools": [
-        "SolidWorks"
+        "SolidWorks",
+        {
+          "fr": "Électrotechnique",
+          "en": "Electrotechnics"
+        },
+        {
+          "fr": "Prototypage",
+          "en": "Prototyping"
+        }
       ],
       "sections": [
         {
           "title": {
-            "fr": "Problème initial et analyse",
-            "en": "Initial problem and analysis"
+            "fr": "Analyse et rétro-ingénierie",
+            "en": "Analysis and reverse engineering"
           },
           "text": {
-            "fr": "Rétro-ingénierie d’un banc d’essai triphasé pédagogique afin d’étudier son évolution vers une structure modulaire.",
-            "en": "Reverse engineering of a three-phase educational test bench to study its evolution toward a modular structure."
+            "fr": "Analyse du banc pédagogique existant et définition d’une architecture modulaire permettant plusieurs configurations d’essais monophasés et triphasés.",
+            "en": "Analysis of the existing educational bench and definition of a modular architecture supporting different single-phase and three-phase experiments."
           }
         },
         {
           "title": {
-            "fr": "Architecture électrique",
-            "en": "Electrical architecture"
+            "fr": "Architecture électrique et mécanique",
+            "en": "Electrical and mechanical architecture"
           },
           "text": {
-            "fr": "Étude de trois transformateurs monophasés indépendants de 100 VA, à prises multiples, pour des configurations monophasées et triphasées.",
-            "en": "Study of three independent multi-tap 100 VA single-phase transformers for single-phase and three-phase configurations."
+            "fr": "Intégration de trois transformateurs monophasés multi-prises de 100 VA, d’un redresseur à six diodes, de charges pédagogiques et d’une unité de mesure. La reconception mécanique a été menée sous SolidWorks.",
+            "en": "Integration of three multi-tap 100 VA single-phase transformers, a six-diode rectifier, educational loads and a measurement unit. Mechanical redesign was carried out in SolidWorks."
           }
         },
         {
           "title": {
-            "fr": "Modélisation mécanique",
-            "en": "Mechanical modeling"
+            "fr": "Approvisionnement et réalisation",
+            "en": "Component sourcing and construction"
           },
           "text": {
-            "fr": "Reconception mécanique sous SolidWorks pour représenter l’organisation modulaire proposée.",
-            "en": "Mechanical redesign in SolidWorks to represent the proposed modular arrangement."
+            "fr": "Recherche et approvisionnement des composants, assemblage et intégration des éléments électriques et mécaniques jusqu’à l’obtention d’un prototype fonctionnel. Le projet est allé au-delà de l’étude de conception.",
+            "en": "Component research and sourcing, assembly, and integration of electrical and mechanical elements into a working prototype. The project progressed beyond a design study."
           }
         },
         {
           "title": {
-            "fr": "Redressement",
-            "en": "Rectification"
+            "fr": "Essais et validation pratique",
+            "en": "Testing and practical validation"
           },
           "text": {
-            "fr": "Étude d’un concept de redresseur universel à six diodes associé au banc.",
-            "en": "Study of a universal six-diode rectifier concept associated with the bench."
+            "fr": "Les calculs théoriques ont été confrontés aux essais et aux mesures pratiques. Le fonctionnement du prototype et la concordance des résultats avec les calculs ont été vérifiés pendant les manipulations.",
+            "en": "Theoretical calculations were compared with practical tests and measurements. Prototype operation and agreement between the results and calculations were checked during the experiments."
+          }
+        },
+        {
+          "title": {
+            "fr": "Manuel de TP et présentation",
+            "en": "Laboratory manual and presentation"
+          },
+          "text": {
+            "fr": "Réalisation d’un manuel couvrant plus de 12 travaux pratiques et d’un panneau de présentation expliquant le fonctionnement, les usages et les publics visés par le banc.",
+            "en": "Creation of a manual covering more than 12 laboratory exercises and a presentation board explaining the bench’s operation, uses and intended audiences."
+          }
+        },
+        {
+          "title": {
+            "fr": "Valorisation du prototype",
+            "en": "Developing the prototype further"
+          },
+          "text": {
+            "fr": "Le banc a été présenté comme une réalisation pédagogique concrète, avec une perspective de valorisation entrepreneuriale et de reproduction au-delà de l’exemplaire initial.",
+            "en": "The bench was presented as a practical educational product, with a perspective of entrepreneurial development and reproduction beyond the initial unit."
           }
         }
       ],
       "limits": {
-        "fr": "La fabrication, les essais électriques et la conformité de sécurité ne sont pas établis par les éléments disponibles. Aucune validation expérimentale n’est revendiquée.",
-        "en": "Manufacturing, electrical tests and safety compliance are not established by the available material. No experimental validation is claimed."
+        "fr": "La principale limite rencontrée a été le manque de financement pour passer du prototype fonctionnel à une production reproductible et à une valorisation dans le cadre d’une startup.",
+        "en": "The main limitation was the lack of funding to move from a working prototype to repeatable production and development as a startup venture."
       },
-      "cover": "project-bench.svg",
-      "evidence": []
+      "cover": "evidence-bench-prototype.jpg",
+      "evidence": [
+        {
+          "type": "image",
+          "src": "evidence-bench-prototype.jpg",
+          "width": 1600,
+          "height": 1200,
+          "caption": {
+            "fr": "Prototype réalisé : transformateurs, charges, redressement et unité de mesure sur le panneau du banc.",
+            "en": "Completed prototype: transformers, loads, rectification and measurement unit on the bench panel."
+          },
+          "alt": {
+            "fr": "Prototype physique du banc pédagogique",
+            "en": "Physical educational bench prototype"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-bench-outdoors.jpg",
+          "width": 800,
+          "height": 600,
+          "caption": {
+            "fr": "Vue d’ensemble du prototype et de son boîtier. Photographie de projet.",
+            "en": "Overview of the prototype and its enclosure. Project photograph."
+          },
+          "alt": {
+            "fr": "Vue d’ensemble du banc réalisé",
+            "en": "Overview of the completed bench"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-bench-layout.png",
+          "width": 1392,
+          "height": 782,
+          "caption": {
+            "fr": "Maquette graphique de la face avant : connexions, charges et fonctions de mesure.",
+            "en": "Front-panel graphic layout: connections, loads and measurement functions."
+          },
+          "alt": {
+            "fr": "Maquette de la face avant du banc",
+            "en": "Bench front-panel layout"
+          }
+        }
+      ],
+      "coverAlt": {
+        "fr": "Photographie du prototype réalisé du banc d’électrotechnique",
+        "en": "Photograph of the completed electrotechnical bench prototype"
+      },
+      "coverNote": {
+        "fr": "Photographies réelles du prototype et maquette de sa face avant fournies avec le projet.",
+        "en": "Actual prototype photos and a front-panel layout supplied with the project."
+      },
+      "links": [
+        {
+          "href": "https://www.linkedin.com/feed/update/urn:li:activity:7473314897595019265/",
+          "label": {
+            "fr": "Présentation du projet sur LinkedIn ↗",
+            "en": "Project presentation on LinkedIn ↗"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oncf",
+      "featured": false,
+      "title": {
+        "fr": "Signalisation ferroviaire et étude de régulation",
+        "en": "Railway signaling and control study"
+      },
+      "context": {
+        "fr": "ONCF · Rabat-Agdal · 1–30 juillet 2025",
+        "en": "ONCF · Rabat-Agdal · 1–30 July 2025"
+      },
+      "summary": {
+        "fr": "Étude des équipements de signalisation, analyse d’un défaut de circuit de voie et comparaison de lois de commande sous MATLAB/Simulink.",
+        "en": "Study of signaling equipment, analysis of a track-circuit fault and comparison of control laws in MATLAB/Simulink."
+      },
+      "role": {
+        "fr": "Stage d’initiation : observation des équipements, analyse du problème, modélisation et interprétation des réponses simulées dans le cadre du rapport de stage.",
+        "en": "Introductory internship: equipment observation, problem analysis, modeling and interpretation of simulated responses for the internship report."
+      },
+      "status": {
+        "fr": "Observation terrain · Analyse · Simulation",
+        "en": "Field observation · Analysis · Simulation"
+      },
+      "objective": {
+        "fr": "Comprendre les chaînes de détection et de commande ferroviaires, puis étudier des solutions de régulation dans un modèle de simulation.",
+        "en": "Understand railway detection and control chains, then study control strategies in a simulation model."
+      },
+      "metrics": [
+        {
+          "value": "P · PI · PD · PID",
+          "label": {
+            "fr": "Correcteurs comparés en simulation",
+            "en": "Controllers compared in simulation"
+          }
+        }
+      ],
+      "tools": [
+        "MATLAB",
+        "Simulink",
+        "DMAIC",
+        "Ziegler–Nichols"
+      ],
+      "sections": [
+        {
+          "title": {
+            "fr": "Contexte du stage",
+            "en": "Internship context"
+          },
+          "text": {
+            "fr": "Stage au sein de la maintenance de la signalisation ferroviaire à Rabat-Agdal. Le rapport relie l’observation des équipements à la détection de présence des trains et à l’étude de chaînes de commande.",
+            "en": "Internship within railway-signaling maintenance in Rabat-Agdal. The report connects equipment observation with train-presence detection and control-chain analysis."
+          }
+        },
+        {
+          "title": {
+            "fr": "Analyse du circuit de voie",
+            "en": "Track-circuit analysis"
+          },
+          "text": {
+            "fr": "Étude du rôle des capteurs, relais, éléments de transmission et traitements logiques dans la détection, avec analyse d’un défaut de circuit de voie.",
+            "en": "Study of sensors, relays, transmission elements and logic processing in detection, including analysis of a track-circuit fault."
+          }
+        },
+        {
+          "title": {
+            "fr": "Démarche de résolution",
+            "en": "Problem-solving approach"
+          },
+          "text": {
+            "fr": "Structuration de l’étude avec DMAIC et QQOQCP, identification des critères de rapidité, stabilité et précision, puis modélisation de la boucle étudiée.",
+            "en": "Study structured with DMAIC and QQOQCP, identification of speed, stability and accuracy criteria, and modeling of the control loop."
+          }
+        },
+        {
+          "title": {
+            "fr": "Modélisation MATLAB/Simulink",
+            "en": "MATLAB/Simulink modeling"
+          },
+          "text": {
+            "fr": "Construction de modèles avec correcteurs P, PI, PD et PID et étude du réglage par Ziegler–Nichols. Les réponses à une consigne sont comparées dans le modèle.",
+            "en": "Construction of P, PI, PD and PID controller models and study of Ziegler–Nichols tuning. Setpoint responses are compared within the model."
+          }
+        },
+        {
+          "title": {
+            "fr": "Résultats de simulation",
+            "en": "Simulation results"
+          },
+          "text": {
+            "fr": "Dans l’étude, le correcteur P accélère la réponse tout en laissant une erreur statique ; le PI améliore la précision avec davantage de dépassement ; le PID présente un meilleur compromis entre rapidité, stabilité et précision dans le modèle considéré.",
+            "en": "Within the study, P control speeds up the response while leaving steady-state error; PI improves accuracy with more overshoot; PID provides a better balance of speed, stability and accuracy in the model considered."
+          }
+        }
+      ],
+      "limits": {
+        "fr": "Les conclusions portent sur les modèles de l’étude et leurs réponses simulées. Elles ne constituent pas une homologation ni une modification d’un système de freinage en exploitation.",
+        "en": "The conclusions concern the study models and their simulated responses. They do not constitute approval or modification of an operational braking system."
+      },
+      "cover": null,
+      "evidence": [
+        {
+          "type": "image",
+          "src": "evidence-oncf-pid-model.webp",
+          "width": 1098,
+          "height": 404,
+          "sourcePage": 51,
+          "caption": {
+            "fr": "Modèle de simulation avec correcteur PID, extrait du rapport de stage, figure 5.25, p. 51.",
+            "en": "PID simulation model from the internship report, figure 5.25, p. 51."
+          },
+          "alt": {
+            "fr": "Modèle MATLAB/Simulink avec correcteur PID",
+            "en": "MATLAB/Simulink PID controller model"
+          }
+        },
+        {
+          "type": "image",
+          "src": "evidence-oncf-pid-response.webp",
+          "width": 659,
+          "height": 283,
+          "sourcePage": 52,
+          "caption": {
+            "fr": "Réponse simulée du modèle avec PID ; ce graphique ne représente pas un essai sur train. Rapport, figure 5.27, p. 52.",
+            "en": "Simulated response of the PID model; this plot is not a train test. Report, figure 5.27, p. 52."
+          },
+          "alt": {
+            "fr": "Courbe de réponse simulée du modèle PID",
+            "en": "Simulated PID model response"
+          }
+        }
+      ]
     }
   ],
   "copy": {
     "fr": {
       "heroRole": "Élève-ingénieur en Génie Électrique et Contrôle des Systèmes Industriels",
-      "pfeGoal": "Je recherche un stage de fin d’études en génie électrique, automatisme ou énergie.",
+      "pfeGoal": "Je recherche un stage de fin d’études dans le domaine du génie électrique.",
       "institution": "ENSET Mohammedia · Cycle d’ingénieur depuis 2024",
       "availabilityLabel": "Stage PFE",
       "heroPortraitCaption": "Énergie · Automatisme · Systèmes industriels",
@@ -445,11 +854,11 @@ window.portfolioData = {
       "credStudy": "Étude PV · 1,20 MWc",
       "selectedWorks": "Projets d’ingénierie",
       "viewProject": "Lire l’étude de cas ↗",
-      "galleryNote": "Visuels de couverture conceptuels. Les études de cas précisent les méthodes, contributions et limites.",
+      "galleryNote": "Photographies de projet, extraits de rapports et illustration conceptuelle pour l’étude PV. Chaque étude de cas précise la nature des visuels.",
       "yazakiSummary": "Étude individuelle d’un système photovoltaïque en autoconsommation : analyse des besoins, dimensionnement sous PVsyst et implantation BIM sous Revit.",
       "oncfRole": "Stage d’initiation · Étude de systèmes ferroviaires et simulation de lois de commande",
-      "oncf1": "Étude des équipements de signalisation et de la détection de défauts sur les circuits de voie.",
-      "oncf2": "Simulation de correcteurs P, PI, PD et PID sous MATLAB/Simulink, dans le cadre d’une étude de commande du freinage.",
+      "oncf1": "Étude des équipements de signalisation et analyse d’un défaut de circuit de voie, dans le cadre d’un stage d’initiation à Rabat-Agdal.",
+      "oncf2": "Modélisation sous MATLAB/Simulink et comparaison de correcteurs P, PI, PD et PID avec une démarche DMAIC.",
       "oncfScope": "Périmètre : étude et simulation. Aucune modification du freinage opérationnel ni mise en service ERTMS revendiquée.",
       "engineeringDate": "2024 – en cours",
       "skillsIntro": "Des outils reliés à des travaux précis, puis les autres compétences mentionnées dans mon CV.",
@@ -457,9 +866,9 @@ window.portfolioData = {
       "otherToolsCopy": "TIA Portal · S7-1500 · CANECO BT · AutoCAD Electrical · Arduino · Capteurs et IHM · Python · C · Structured Text. Leur présence dans le CV ne signifie pas qu’ils ont tous été utilisés dans les quatre projets ci-dessus.",
       "standards": "Référentiels étudiés et sensibilisation",
       "standardsDescription": "IEC 60364 · IEC 61131-3 · NF C 15-100 · ISO 50001. Connaissances de référence ; aucune qualification de conformité ou habilitation n’est revendiquée.",
-      "profileCopy": "Mes stages chez YAZAKI et à l’ONCF relient mes études à des questions industrielles : dimensionner une solution énergétique, représenter une implantation et analyser une commande. Je souhaite poursuivre cette démarche dans un PFE encadré.",
-      "contactEyebrow": "Un sujet de PFE en génie électrique, automatisme ou énergie ?",
-      "contactDescription": "Échangeons sur votre besoin, le sujet et l’encadrement du stage.",
+      "profileCopy": "Mes stages industriels et mes projets académiques m’ont permis de développer mes compétences en analyse, modélisation, conception et résolution de problèmes techniques. Je souhaite contribuer aux travaux d’une équipe d’ingénierie et approfondir mes compétences dans le cadre d’un projet de fin d’études.",
+      "contactEyebrow": "Une opportunité de stage de fin d’études en génie électrique ?",
+      "contactDescription": "Échangeons sur vos besoins techniques et sur la contribution que je pourrais apporter à votre équipe dans le cadre de mon PFE.",
       "objective": "Objectif",
       "personalRole": "Ma contribution",
       "approach": "Démarche technique",
@@ -476,11 +885,18 @@ window.portfolioData = {
       "openPdf": "Ouvrir le document PDF ↗",
       "projectMediaAlt": "Illustration conceptuelle du projet",
       "title": "Abderrahmane FERRATI | Élève-ingénieur · Stage PFE",
-      "description": "Élève-ingénieur à l’ENSET Mohammedia. Projets en génie électrique, automatisme et énergie. Stage PFE dès mi-janvier 2027, 5–6 mois ou plus."
+      "description": "Élève-ingénieur à l’ENSET Mohammedia : stages industriels, projets en génie électrique et prototype pédagogique fonctionnel. Disponible pour un PFE dès mi-janvier 2027.",
+      "credAcademic": "Projets académiques",
+      "highlightAutomation": "Automatisme",
+      "highlightPower": "Push-Pull",
+      "profileLead": "Élève-ingénieur à l’ENSET Mohammedia, je m’intéresse aux différents domaines du génie électrique, de l’analyse des systèmes à la conception et à la réalisation de solutions techniques.",
+      "footerIntro": "Génie électrique. Projets concrets. Nouvelles perspectives.",
+      "oncfDate": "Juillet 2025",
+      "projectPost": "Présentation du projet sur LinkedIn ↗"
     },
     "en": {
       "heroRole": "Electrical Engineering and Industrial Control Systems Student",
-      "pfeGoal": "Seeking a final-year internship in electrical engineering, automation or energy.",
+      "pfeGoal": "Seeking a final-year internship in electrical engineering.",
       "institution": "ENSET Mohammedia · Engineering program since 2024",
       "availabilityLabel": "Final-year internship",
       "heroPortraitCaption": "Energy · Automation · Industrial systems",
@@ -492,11 +908,11 @@ window.portfolioData = {
       "credStudy": "PV study · 1.20 MWp",
       "selectedWorks": "Engineering projects",
       "viewProject": "Read case study ↗",
-      "galleryNote": "Conceptual cover illustrations. Case studies explain methods, contributions and limitations.",
+      "galleryNote": "Project photos, report extracts and a conceptual illustration for the PV study. Each case study identifies the nature of its visuals.",
       "yazakiSummary": "Individual study of a self-consumption PV system: requirements analysis, PVsyst sizing and Revit BIM layout.",
       "oncfRole": "Introductory internship · Railway systems study and control-law simulation",
-      "oncf1": "Study of signaling equipment and fault detection in track circuits.",
-      "oncf2": "Simulation of P, PI, PD and PID controllers in MATLAB/Simulink as part of a braking-control study.",
+      "oncf1": "Study of signaling equipment and analysis of a track-circuit fault during an introductory internship in Rabat-Agdal.",
+      "oncf2": "MATLAB/Simulink modeling and comparison of P, PI, PD and PID controllers using a DMAIC approach.",
       "oncfScope": "Scope: study and simulation. No operational braking modification or ERTMS commissioning is claimed.",
       "engineeringDate": "2024 – present",
       "skillsIntro": "Tools connected to specific work, followed by the other skills listed in my résumé.",
@@ -504,9 +920,9 @@ window.portfolioData = {
       "otherToolsCopy": "TIA Portal · S7-1500 · CANECO BT · AutoCAD Electrical · Arduino · Sensors and HMI · Python · C · Structured Text. Their inclusion in my résumé does not mean they were all used in the four projects above.",
       "standards": "Reference standards and awareness",
       "standardsDescription": "IEC 60364 · IEC 61131-3 · NF C 15-100 · ISO 50001. Reference knowledge; no compliance qualification or authorization is claimed.",
-      "profileCopy": "My internships at YAZAKI and ONCF connect my studies with industrial questions: sizing an energy solution, representing a layout and analyzing control systems. I want to continue this approach in a supervised final-year project.",
-      "contactEyebrow": "A final-year project in electrical engineering, automation or energy?",
-      "contactDescription": "Let’s discuss your needs, the project and internship supervision.",
+      "profileCopy": "My industrial internships and academic projects have developed my skills in analysis, modeling, design and technical problem-solving. I am seeking a final-year project where I can contribute to an engineering team, strengthen these skills and work on real technical challenges.",
+      "contactEyebrow": "A final-year internship opportunity in electrical engineering?",
+      "contactDescription": "Let’s discuss your engineering needs and how I could contribute to your team during my final-year internship.",
       "objective": "Objective",
       "personalRole": "My contribution",
       "approach": "Technical approach",
@@ -523,7 +939,14 @@ window.portfolioData = {
       "openPdf": "Open PDF document ↗",
       "projectMediaAlt": "Conceptual project illustration",
       "title": "Abderrahmane FERRATI | Engineering student · Final-year internship",
-      "description": "Engineering student at ENSET Mohammedia. Electrical engineering, automation and energy projects. Final-year internship from mid-January 2027, 5–6 months or longer."
+      "description": "Engineering student at ENSET Mohammedia: industrial internships, electrical engineering projects and a working educational prototype. Available for a final-year internship from mid-January 2027.",
+      "credAcademic": "Academic projects",
+      "highlightAutomation": "Automation",
+      "highlightPower": "Push-Pull",
+      "profileLead": "Engineering student at ENSET Mohammedia with a broad interest in electrical engineering, from analyzing systems to designing and building practical technical solutions.",
+      "footerIntro": "Electrical engineering. Practical projects. New possibilities.",
+      "oncfDate": "July 2025",
+      "projectPost": "Project presentation on LinkedIn ↗"
     }
   }
 };

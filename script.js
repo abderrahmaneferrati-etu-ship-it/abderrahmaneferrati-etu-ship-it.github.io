@@ -107,7 +107,7 @@ Object.assign(translations.fr, {
   internshipCount: 'Stages en industrie', academicCount: 'Projets académiques', englishLevel: 'Anglais · EF SET',
   letsTalk: 'Parlons-en.', footerIntro: 'Génie électrique. Systèmes industriels. Nouvelles perspectives.',
   footerMenu: 'Navigation', footerConnect: 'Contact', footerEmail: 'E-mail ↗',
-  designCredit: 'Design inspiré d’Asher Vale par Asad Khaleel', projectDetails: 'Détails du projet', closeProject: 'Fermer le projet',
+  projectDetails: 'Détails du projet', closeProject: 'Fermer le projet',
   illustrationNote: 'Les visuels sont des illustrations du projet. Les détails techniques proviennent de mon CV.'
 });
 Object.assign(translations.en, {
@@ -126,7 +126,7 @@ Object.assign(translations.en, {
   internshipCount: 'Industry internships', academicCount: 'Academic projects', englishLevel: 'English · EF SET',
   letsTalk: 'Let’s talk.', footerIntro: 'Electrical engineering. Industrial systems. New possibilities.',
   footerMenu: 'Navigation', footerConnect: 'Connect', footerEmail: 'Email ↗',
-  designCredit: 'Design inspired by Asher Vale by Asad Khaleel', projectDetails: 'Project details', closeProject: 'Close project',
+  projectDetails: 'Project details', closeProject: 'Close project',
   illustrationNote: 'The visuals are project illustrations. Technical details are based on my résumé.'
 });
 
@@ -142,14 +142,14 @@ const t = key => translations[language][key] || '';
 const projectFromRoute = () => content.projects.find(p => `#project-${p.id}` === location.hash);
 const tags = values => `<div class="tags">${values.map(v => `<span>${e(v)}</span>`).join('')}</div>`;
 
-// Evidence is deliberately empty until authentic, authorized files are supplied.
+// Only supplied project photos and report extracts are used as evidence.
 // Supported types: image {src, alt, caption}, pdf {src, caption}, video {src, poster, caption}.
 function renderEvidence(items) {
   if (!items?.length) return '';
   const media = items.map(item => {
     if (!item.src) return '';
     const src = escapeHtml(item.src), caption = e(item.caption);
-    if (item.type === 'image') return `<figure><button type="button" class="evidence-image" data-image="${src}" data-caption="${caption}" data-alt="${e(item.alt)}" aria-label="${escapeHtml(t('openImage'))}"><img src="${src}" alt="${e(item.alt)}" loading="lazy" width="960" height="640"></button><figcaption>${caption}</figcaption></figure>`;
+    if (item.type === 'image') return `<figure><button type="button" class="evidence-image" data-image="${src}" data-caption="${caption}" data-alt="${e(item.alt)}" aria-label="${escapeHtml(t('openImage')+': '+local(item.alt))}"><img src="${src}" alt="${e(item.alt)}" loading="lazy" width="${Number(item.width)||960}" height="${Number(item.height)||640}"></button><figcaption>${caption}</figcaption></figure>`;
     if (item.type === 'pdf') return `<figure class="pdf-evidence"><a class="button button-outline" href="${src}" target="_blank" rel="noopener">${escapeHtml(t('openPdf'))}</a><figcaption>${caption}</figcaption></figure>`;
     if (item.type === 'video') return `<figure><video controls preload="metadata" ${item.poster ? `poster="${escapeHtml(item.poster)}"` : ''}><source src="${src}"></video><figcaption>${caption}</figcaption></figure>`;
     return '';
@@ -159,12 +159,17 @@ function renderEvidence(items) {
 function renderProjects() {
   content.projects.forEach((p,index) => {
     const card = document.querySelector(`[data-card="${p.id}"]`);
-    card.innerHTML = `<span class="card-context">${e(p.context)}</span><span class="card-summary">${e(p.summary)}</span>${tags(p.tools.slice(0,3))}<span class="card-result">${e(p.metrics[0].value)} · ${e(p.metrics[0].label)}</span><span class="card-action">${escapeHtml(t('viewProject'))}</span>`;
-    const visualTitle = card.closest('.work-card').querySelector('.work-title');
-    visualTitle.textContent = local(p.title);
+    if (card) {
+      card.innerHTML = `<span class="card-context">${e(p.context)}</span><span class="card-summary">${e(p.summary)}</span>${tags(p.tools.slice(0,3))}<span class="card-result">${e(p.metrics[0].value)} · ${e(p.metrics[0].label)}</span><span class="card-action">${escapeHtml(t('viewProject'))}</span>`;
+      const visual=card.closest('.work-card');
+      visual.querySelector('.work-title').textContent=local(p.title);
+      visual.querySelector('img').src=p.cover;
+      visual.querySelector('img').alt=local(p.coverAlt||p.title);
+    }
     const skill = document.querySelector(`[data-skill-project="${p.id}"]`);
     if (skill) skill.textContent = `${local(p.title)} ↗`;
     const next = content.projects[(index+1)%content.projects.length];
+    const coverNote=p.coverNote||(p.cover?.endsWith('.svg')?t('illustrationNote'):'');
     document.querySelector(`[data-case="${p.id}"]`).innerHTML = `
       <p class="case-context">${e(p.context)}</p>
       <h2 id="dialog-title-${p.id}" tabindex="-1">${e(p.title)}</h2>
@@ -175,7 +180,8 @@ function renderProjects() {
       ${renderEvidence(p.evidence)}
       <section class="case-limits"><h3>${escapeHtml(t('limits'))}</h3><p>${e(p.limits)}</p></section>
       <section class="case-tools"><h3>${escapeHtml(t('tools'))}</h3>${tags(p.tools)}</section>
-      <p class="illustration-note">${escapeHtml(t('illustrationNote'))}</p>
+      ${coverNote?`<p class="illustration-note">${e(coverNote)}</p>`:''}
+      ${p.links?.length?`<div class="project-external-links">${p.links.map(link=>`<a class="text-link" href="${escapeHtml(link.href)}" target="_blank" rel="noopener noreferrer">${e(link.label)}</a>`).join('')}</div>`:''}
       <div class="case-actions"><a href="#project-${next.id}" data-open-project="project-${next.id}" class="text-link">${escapeHtml(t('nextProject'))} : ${e(next.title)} ↗</a><a href="mailto:${escapeHtml(content.profile.email)}?subject=${encodeURIComponent(local(p.title))}" class="button button-dark">${escapeHtml(t('discussProject'))}</a></div>`;
   });
 }

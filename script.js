@@ -247,6 +247,8 @@ document.addEventListener('keydown',event=>{
   }
 });
 function syncRoute() {
+  const mediaViewer=document.getElementById('media-viewer');
+  if(mediaViewer.open) mediaViewer.close();
   const routeLang=new URLSearchParams(location.search).get('lang');
   if(routeLang&&routeLang!==language)setLanguage(routeLang,false);
   const p=projectFromRoute();
